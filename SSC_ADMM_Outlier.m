@@ -45,20 +45,15 @@ function [W,E] = SSC_ADMM_Outlier(X, varargin)
         C = C - diag(diag(C));
         U = U + (X-X*W-E);
         V = V + (C-W);
-        
-        switch printFlag
-            case true
-                print_status(iteration, C, W, E, X, lambda);
-                continue;
-            otherwise
-                continue;
+
+        if (printFlag)
+            print_status(iteration, C, W, E, X, lambda);
         end
         
-        if (norm(X-X*W-E,'fro')<1e-4 && norm(C-W,'fro')<1e-4)
+        if(norm(X-X*W-E,'fro')<1e-4 && norm(C-W,'fro')<1e-4)
             break;
         else
-            continue;
-            
+            continue;  
         end
         
     end
