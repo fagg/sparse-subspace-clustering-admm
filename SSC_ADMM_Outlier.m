@@ -32,6 +32,7 @@ function [W,E] = SSC_ADMM_Outlier(X, varargin)
     W = zeros(N,N);
     V = zeros(N,N);
     U = zeros(M,N);
+    Wprev = randn(N,N);
     
     lambda = estimate_lambda(X);
     rho = estimate_rho(X);
@@ -47,12 +48,13 @@ function [W,E] = SSC_ADMM_Outlier(X, varargin)
         V = V + (C-W);
 
         if (printFlag)
-            print_status(iteration, C, W, E, X, lambda);
+            print_status(iteration, C, W, E, X, lambda,Wprev);
         end
         
-        if(norm(X-X*W-E,'fro')<1e-4 && norm(C-W,'fro')<1e-4)
+        if(iteration>100 && norm(W-Wprev,'fro')<1e-5)
             break;
         else
+            Wprev = W;
             continue;  
         end
         
@@ -83,7 +85,7 @@ function finalW = normalise_final_W(W)
     end
 end
 
-function print_status(it, C, W, E, X, lambda)
+function print_status(it, C, W, E, X, lambda,Wprev)
     %disp(['||W||_1 ', num2str(norm(W,1))]);
     %disp(['||C||_1' , num2str(norm(C,1))]);
     %disp(['||E||_1' , num2str(norm(E,1))]);
@@ -92,5 +94,6 @@ function print_status(it, C, W, E, X, lambda)
     disp(['||W||_1 + lambda*||E||_1 = ', num2str(obj)]);
     disp(['||X-XW-E||_F = ', num2str(norm(X-X*W-E,'fro'))]);
     disp(['||C-W||_F = ', num2str(norm(C-W,'fro'))]);
+    disp(['||W_k+1 - W_k||_F = ' num2str(norm(W-Wprev,'fro'))]);
     disp('-------------------------------');
 end
