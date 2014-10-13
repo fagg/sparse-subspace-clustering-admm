@@ -11,7 +11,7 @@
 %
 % Ashton Fagg, ashton@fagg.id.au
 
-function W = SSC_ADMM_Outlier(X, varargin)
+function W = SSC_ADMM_Lasso(X, varargin)
     if (nargin == 1)
        maxIterations = 10000;
        printFlag = false;
