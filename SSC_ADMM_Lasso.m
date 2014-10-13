@@ -78,6 +78,7 @@ function finalW = normalise_final_W(W)
        Wi = Wi / norm(Wi, Inf);
        finalW(:,i) = Wi;
     end
+    finalW = abs(finalW) + abs(finalW');
 end
 
 function print_status(it, C, W, X, lambda)

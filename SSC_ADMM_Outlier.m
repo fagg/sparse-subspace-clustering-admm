@@ -51,7 +51,7 @@ function [W,E] = SSC_ADMM_Outlier(X, varargin)
             print_status(iteration, C, W, E, X, lambda,Wprev);
         end
         
-        if(iteration>100 && norm(W-Wprev,'fro')<1e-5)
+        if(iteration>20 && norm(W-Wprev,'fro')<1e-5)
             break;
         else
             Wprev = W;
@@ -83,6 +83,7 @@ function finalW = normalise_final_W(W)
        Wi = Wi / norm(Wi, Inf);
        finalW(:,i) = Wi;
     end
+    finalW = abs(finalW) + abs(finalW');
 end
 
 function print_status(it, C, W, E, X, lambda,Wprev)
